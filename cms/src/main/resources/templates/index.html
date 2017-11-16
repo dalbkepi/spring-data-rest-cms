@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-    <title>ReactJS + Spring Data REST</title>
+    <title>Spring Data REST CMS</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -14,27 +14,33 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4">
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a th:each="service : ${services}" class="nav-link left-nav" th:id="${service} + '-tab'" th:href="'#'+${service}" data-toggle="pill" role="tab" aria-selected="true" th:text="${service}"></a>
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="tab-content" id="v-pills-tabContent">
-                <div th:each="service : ${services}" class="tab-pane fade" th:id="${service}" role="tabpanel">
-                    <ul class="nav nav-tabs" th:id="${service} + '-endpoint-tab'" role="tablist">
-                        <!--async-->
-                    </ul>
-                    <div class="tab-content" th:id="${service} + '-endpoint-content'">
-                        <!--async-->
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="app"></div>
     </div>
-
-
 </div>
+
+<!--<div class="container-fluid">-->
+    <!--<div class="row">-->
+        <!--<div class="col-4">-->
+            <!--<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">-->
+                <!--<a th:each="service : ${services}" class="nav-link left-nav" th:id="${service} + '-tab'" th:href="'#'+${service}" data-toggle="pill" role="tab" aria-selected="true" th:text="${service}"></a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-8">-->
+            <!--<div class="tab-content" id="v-pills-tabContent">-->
+                <!--<div th:each="service : ${services}" class="tab-pane fade" th:id="${service}" role="tabpanel">-->
+                    <!--<ul class="nav nav-tabs" th:id="${service} + '-endpoint-tab'" role="tablist">-->
+                        <!--&lt;!&ndash;async&ndash;&gt;-->
+                    <!--</ul>-->
+                    <!--<div class="tab-content" th:id="${service} + '-endpoint-content'">-->
+                        <!--&lt;!&ndash;async&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+<!--</div>-->
 
 
 <!-- Optional JavaScript -->
@@ -42,52 +48,52 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-<!--<script src="built/bundle.js"></script>-->
+<script type="text/javascript" src="/built/bundle.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $(".left-nav").each(function(key, value) {
-            $(value).on('click', function(e) {
-                e.preventDefault();
-                let service = $(this).html();
-                $("#"+service+"-endpoint-tab").html("");
-                $("#"+service+"-endpoint-content").html("");
-                let url = "/api/" + service;
-                $.ajax({url: url})
-                .done(function(result) {
-                    var first = Object.keys(result)[0];
-                    $.each(result, function(key, value) {
-                        var isFirst = "";
-                        var isFirstContent = "";
-                        if (key == first) {
-                            isFirst = "active";
-                            isFirstContent = "active show";
-                        }
-                        var child =
-                            '<li class="nav-item">' +
-                            '<a class="nav-link '+isFirst+'" id="'+key+'-tab" data-toggle="tab" href="#'+key+'" role="tab" aria-controls="'+key+'" aria-selected="true">'+key+'</a>' +
-                            '</li>';
+<!--<script>-->
+    <!--$(document).ready(function() {-->
+        <!--$(".left-nav").each(function(key, value) {-->
+            <!--$(value).on('click', function(e) {-->
+                <!--e.preventDefault();-->
+                <!--let service = $(this).html();-->
+                <!--$("#"+service+"-endpoint-tab").html("");-->
+                <!--$("#"+service+"-endpoint-content").html("");-->
+                <!--let url = "/api/" + service;-->
+                <!--$.ajax({url: url})-->
+                <!--.done(function(result) {-->
+                    <!--var first = Object.keys(result)[0];-->
+                    <!--$.each(result, function(key, value) {-->
+                        <!--var isFirst = "";-->
+                        <!--var isFirstContent = "";-->
+                        <!--if (key == first) {-->
+                            <!--isFirst = "active";-->
+                            <!--isFirstContent = "active show";-->
+                        <!--}-->
+                        <!--var child =-->
+                            <!--'<li class="nav-item">' +-->
+                            <!--'<a class="nav-link '+isFirst+'" id="'+key+'-tab" data-toggle="tab" href="#'+key+'" role="tab" aria-controls="'+key+'" aria-selected="true">'+key+'</a>' +-->
+                            <!--'</li>';-->
 
-                        $("#"+service+"-endpoint-tab").append(child);
+                        <!--$("#"+service+"-endpoint-tab").append(child);-->
 
-                        var contentChild = '<div class="tab-pane fade '+isFirstContent+'" id="'+key+'" role="tabpanel" aria-labelledby="'+key+'-tab">' +
-                                '<div class="card">' +
-                                    '<div class="card-body">' +
-                                        JSON.stringify(value) +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>'
+                        <!--var contentChild = '<div class="tab-pane fade '+isFirstContent+'" id="'+key+'" role="tabpanel" aria-labelledby="'+key+'-tab">' +-->
+                                <!--'<div class="card">' +-->
+                                    <!--'<div class="card-body">' +-->
+                                        <!--JSON.stringify(value) +-->
+                                    <!--'</div>' +-->
+                                <!--'</div>' +-->
+                            <!--'</div>'-->
 
-                        $("#"+service+"-endpoint-content").append(contentChild);
-                    });
-                })
-                    .fail(function(error) {
-                        console.error(error);
-                    });
-            });
-        });
-    });
-</script>
+                        <!--$("#"+service+"-endpoint-content").append(contentChild);-->
+                    <!--});-->
+                <!--})-->
+                    <!--.fail(function(error) {-->
+                        <!--console.error(error);-->
+                    <!--});-->
+            <!--});-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
 
 
 </body>

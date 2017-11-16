@@ -23,15 +23,15 @@ class ServicesIndex extends Component {
 
     render() {
         return (
-          <div>
-              <div className="text-xs-right">
-                  <Link className="btn  btn-primary" to="/services/new">Add a Service</Link>
-              </div>
-              <h3>Services</h3>
-              <ul className="list-group">
-                  {this.renderServices()}
-              </ul>
-          </div>
+            <div>
+                {/*<div className="text-xs-right">*/}
+                    {/*<Link className="btn  btn-primary" to="/services/new">Add a Service</Link>*/}
+                {/*</div>*/}
+                <h3>Services</h3>
+                <ul className="list-group">
+                    {this.renderServices()}
+                </ul>
+            </div>
         );
     }
 }

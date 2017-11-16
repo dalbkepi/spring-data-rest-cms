@@ -12,14 +12,14 @@ import ServicesShow from './components/services_show';
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+<Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
-        <div>
-            <Switch>
-                <Route path="/services/:id" component={ServicesShow} />
-                <Route path="/" component={ServicesIndex} />
-            </Switch>
-        </div>
-    </BrowserRouter>
-  </Provider>
-  , document.querySelector('.container'));
+    <div>
+        <Switch>
+            <Route path="/services/:id" component={ServicesShow} />
+            <Route path="/" component={ServicesIndex} />
+        </Switch>
+    </div>
+</BrowserRouter>
+</Provider>
+    , document.querySelector('#app'));

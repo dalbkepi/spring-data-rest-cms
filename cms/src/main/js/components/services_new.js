@@ -12,17 +12,17 @@ class ServicesNew extends Component {
 
         // "...field.input" === onChange={field.input.onChange}, onXXXX...
         return (
-          <div className={className}>
-              <label>{field.label}</label>
-              <input
-                  className="form-control"
-                  type="text"
-                  {...field.input}
-              />
-              <div className="text-help">
-                {touched ? error : ''}
-              </div>
-          </div>
+            <div className={className}>
+                <label>{field.label}</label>
+                <input
+                    className="form-control"
+                    type="text"
+                    {...field.input}
+                />
+                <div className="text-help">
+                    {touched ? error : ''}
+                </div>
+            </div>
         );
     }
 
