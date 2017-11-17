@@ -24,10 +24,11 @@ public class HomeController {
 
 	@RequestMapping(value = "/services/*")
 	public String services(Model model) {
-
-		//		Map<String, String> services = serviceClient.getServices();
-		//		model.addAttribute("services", services.values());
-
 		return "index";
+	}
+
+	@RequestMapping(value = "*")
+	public String default404(Model model) {
+		return "redirect:/";
 	}
 }

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchEndpoints, deleteService } from '../actions';
+import  EndpointsShow  from './endpoints_show';
 
 class ServicesShow extends Component {
 
@@ -31,7 +32,9 @@ class ServicesShow extends Component {
     renderEndpointsContent () {
         return _.map(this.props.endpoints, function(value, key) {
             return (
-                <div key={key+"-content"} className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">{value.href}</div>
+                <div key={key+"-content"} className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <EndpointsShow url={value.href} />
+                </div>
             )
         });
     }
@@ -46,6 +49,7 @@ class ServicesShow extends Component {
         return (
             <div>
                 <Link to="/" className="btn btn-secondary">Back To Index</Link>
+                <br/>
                 {/*<button*/}
                     {/*className="btn btn-danger pull-xs-right"*/}
                     {/*onClick={this.onDeleteClick.bind(this)}*/}

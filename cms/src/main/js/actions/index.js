@@ -5,6 +5,7 @@ export const FETCH_SERVICES = 'fetch_services';
 export const CREATE_SERVICE = 'create_service';
 export const FETCH_ENDPOINTS = 'fetch_endpoints';
 export const DELETE_SERVICE = 'delete_service';
+export const FETCH_ENDPOINT = 'fetch_endpoint';
 
 const ROOT_URL = 'http://localhost:8081';
 const API_KEY = '?key=lalalalala1234';
@@ -40,6 +41,15 @@ export function fetchEndpoints(id) {
 
     return {
         type: FETCH_ENDPOINTS,
+        payload: request
+    }
+}
+
+export function fetchEndpoint(url) {
+    const request = axios.get(url);
+
+    return {
+        type: FETCH_ENDPOINT,
         payload: request
     }
 }
