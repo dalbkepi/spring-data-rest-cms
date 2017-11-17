@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
     entry: './src/main/js/index.js',
@@ -24,5 +25,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['', '.js', '.jsx']
-    }
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true
+        })
+    ]
 };
