@@ -21,12 +21,13 @@ class ServicesShow extends Component {
     }
 
     renderEndpointsTab(firstKey) {
+        const { id } = this.props.match.params;
         return _.map(this.props.endpoints, function(value, key) {
             var firstClass = (key == firstKey) ? 'show active' : ''
             return (
                 <li className="nav-item" key={key+"-tab"}>
-                    {/*<Link to={"/"+id+"/"+key} className={"nav-link " + firstClass}>{key}</Link>*/}
-                    <a className={"nav-link " + firstClass} id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>
+                    <Link to={"/services/"+id+"/"+key} className={"nav-link " + firstClass}>{key}</Link>
+                    {/*<a className={"nav-link " + firstClass} id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>*/}
                 </li>
             )
         });

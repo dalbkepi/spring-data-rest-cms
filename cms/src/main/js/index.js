@@ -8,6 +8,7 @@ import promise from 'redux-promise';
 import reducers from './reducers';
 import ServicesIndex from './components/services_index';
 import ServicesShow from './components/services_show';
+import EndpointShow from './components/endpoint_show';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -16,6 +17,7 @@ ReactDOM.render(
     <BrowserRouter>
     <div>
         <Switch>
+            <Route path="/services/:id/:endpoint" component={EndpointShow} />
             <Route path="/services/:id" component={ServicesShow} />
             <Route path="/" component={ServicesIndex} />
         </Switch>
