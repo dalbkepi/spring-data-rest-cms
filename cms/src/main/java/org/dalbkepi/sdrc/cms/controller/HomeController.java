@@ -22,13 +22,4 @@ public class HomeController {
 		return "index";
 	}
 
-	@RequestMapping(value = "/services/*")
-	public String services(Model model) {
-		return "index";
-	}
-
-	@RequestMapping(value = "*")
-	public String default404(Model model) {
-		return "redirect:/";
-	}
 }

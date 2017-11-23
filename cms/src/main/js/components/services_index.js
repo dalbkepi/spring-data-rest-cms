@@ -22,17 +22,28 @@ class ServicesIndex extends Component {
     }
 
     render() {
-        return (
-            <div>
-                {/*<div className="text-xs-right">*/}
+        if (!_.isEmpty(this.props.services)) {
+            return (
+                <div>
+                    {/*<div className="text-xs-right">*/}
                     {/*<Link className="btn  btn-primary" to="/services/new">Add a Service</Link>*/}
-                {/*</div>*/}
-                <h3>Services</h3>
-                <ul className="list-group">
-                    {this.renderServices()}
-                </ul>
-            </div>
-        );
+                    {/*</div>*/}
+                    <h3>Services</h3>
+                    <ul className="list-group">
+                        {this.renderServices()}
+                    </ul>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <h3>Services</h3>
+                    <div className="alert alert-primary" role="alert">
+                            No services found - Please retry!
+                    </div>
+                </div>
+            )
+        }
     }
 }
 

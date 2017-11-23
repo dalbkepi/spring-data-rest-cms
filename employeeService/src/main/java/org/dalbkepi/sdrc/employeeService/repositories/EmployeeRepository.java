@@ -1,7 +1,8 @@
 package org.dalbkepi.sdrc.employeeService.repositories;
 
 import org.dalbkepi.sdrc.employeeService.entities.Employee;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface EmployeeRepository extends CrudRepository<Employee, Long> {
+public interface EmployeeRepository extends PagingAndSortingRepository<Employee, Long>
+{
 }

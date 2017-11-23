@@ -6,6 +6,7 @@ export const CREATE_SERVICE = 'create_service';
 export const FETCH_ENDPOINTS = 'fetch_endpoints';
 export const DELETE_SERVICE = 'delete_service';
 export const FETCH_ENDPOINT = 'fetch_endpoint';
+export const FETCH_ENDPOINT_META = 'fetch_endpoint_meta';
 
 const ROOT_URL = 'http://localhost:8081';
 const API_KEY = '?key=lalalalala1234';
@@ -37,7 +38,7 @@ export function createService(values, callback) {
 }
 
 export function fetchEndpoints(id) {
-    const request = axios.get(`${ROOT_URL}/${id}/api/`);
+    const request = axios.get(`${ROOT_URL}/${id}/api/profile`);
 
     return {
         type: FETCH_ENDPOINTS,
@@ -52,6 +53,22 @@ export function fetchEndpoint(url) {
         type: FETCH_ENDPOINT,
         payload: request
     }
+}
+
+export function fetchEndpointMeta(url) {
+    const request = axios.get(url);
+
+    return {
+        type: FETCH_ENDPOINT_META,
+        payload: request
+    }
+
+    // client({method: 'GET', path: url}).then(response => {
+    //     return {
+    //         type: FETCH_ENDPOINT_META,
+    //         payload: response
+    //     };
+    // });
 }
 
 export function deleteService(id, callback) {

@@ -9,7 +9,7 @@ export default function(state = {}, action) {
             // newState[service.id] = post;
             // return newState;
             // return { ...state, [action.payload.data.id]: action.payload.data };
-            return _.omit(action.payload.data._links, 'profile');
+            return _.omit(action.payload.data._links, 'self');
         default:
             return state;
     }

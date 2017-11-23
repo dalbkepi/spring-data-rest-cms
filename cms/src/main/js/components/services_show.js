@@ -20,19 +20,22 @@ class ServicesShow extends Component {
         });
     }
 
-    renderEndpointsTab() {
+    renderEndpointsTab(firstKey) {
         return _.map(this.props.endpoints, function(value, key) {
+            var firstClass = (key == firstKey) ? 'show active' : ''
             return (
                 <li className="nav-item" key={key+"-tab"}>
-                    <a className="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>
+                    {/*<Link to={"/"+id+"/"+key} className={"nav-link " + firstClass}>{key}</Link>*/}
+                    <a className={"nav-link " + firstClass} id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>
                 </li>
             )
         });
     }
-    renderEndpointsContent () {
+    renderEndpointsContent (firstKey) {
         return _.map(this.props.endpoints, function(value, key) {
+            var firstClass = (key == firstKey) ? 'show active' : ''
             return (
-                <div key={key+"-content"} className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div key={key+"-content"} className={"tab-pane fade " + firstClass} id="home" role="tabpanel" aria-labelledby="home-tab">
                     <EndpointsShow url={value.href} />
                 </div>
             )
@@ -45,11 +48,13 @@ class ServicesShow extends Component {
         if (_.isEmpty(endpoints)) {
             return <div>Loading...</div>;
         }
+        var firstKey = Object.keys(this.props.endpoints)[0];
 
         return (
             <div>
-                <Link to="/" className="btn btn-secondary">Back To Index</Link>
-                <br/>
+                <div className="mb-3">
+                    <Link to="/" className="btn btn-secondary">Back</Link>
+                </div>
                 {/*<button*/}
                     {/*className="btn btn-danger pull-xs-right"*/}
                     {/*onClick={this.onDeleteClick.bind(this)}*/}
@@ -57,11 +62,11 @@ class ServicesShow extends Component {
                     {/*Delete Service*/}
                 {/*</button>*/}
                 <ul className="nav nav-tabs" id="myTab" role="tablist">
-                    {this.renderEndpointsTab()}
+                    {this.renderEndpointsTab(firstKey)}
                 </ul>
-                <div className="tab-content" id="myTabContent">
-                    {this.renderEndpointsContent()}
-                </div>
+                {/*<div className="tab-content" id="myTabContent">*/}
+                    {/*{this.renderEndpointsContent(firstKey)}*/}
+                {/*</div>*/}
 
             </div>
         );
