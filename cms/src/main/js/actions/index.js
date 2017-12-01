@@ -1,4 +1,5 @@
 import client from '../client';
+import _ from 'lodash';
 
 export const FETCH_SERVICES = 'fetch_services';
 export const CREATE_SERVICE = 'create_service';
@@ -8,7 +9,6 @@ export const FETCH_ENDPOINT = 'fetch_endpoint';
 export const FETCH_ENDPOINT_META = 'fetch_endpoint_meta';
 
 const ROOT_URL = 'http://localhost:8081';
-const API_KEY = '?key=lalalalala1234';
 
 export function fetchServices() {
     var request = client({method: 'GET', path: `${ROOT_URL}/routes`}).then(response => {
