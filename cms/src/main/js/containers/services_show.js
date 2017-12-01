@@ -8,43 +8,22 @@ class ServicesShow extends Component {
 
     constructor(props) {
         super(props);
-        console.log("constructor", arguments);
     }
 
     componentWillMount() {
-        console.log("componentWillMount", arguments);
         const { id } = this.props.match.params;
-        console.log("props inside componentWillMount", this.props);
         this.props.fetchEndpoints(id);
     }
 
-    componentDidMount() {
-        console.log("componentDidMount", arguments);
-    }
 
-    componentWillUpdate() {
-        console.log("componentWillUpdate", arguments);
-    }
-
-    componentDidUpdate() {
-        console.log("componentDidMount", arguments);
-    }
-
-    componentWillUnmount() {
-        console.log("componentWillUnmount", arguments);
-    }
-
-    componentWillReceiveProps(nextProps,prevProps) {
-        console.log("componentWillRecieveProps", arguments);
-        console.log("nextProps", nextProps);
-        console.log("prevProps", prevProps);
-        if (this.props != nextProps) {
-            this.setState();
+    componentWillReceiveProps(nextProps){
+        if(nextProps.location.pathname !== this.props.location.pathname){
+            const { id } = nextProps.match.params;
+            this.props.fetchEndpoints(id);
         }
     }
 
     shouldComponentUpdate() {
-        console.log("shouldComponentUpdate", arguments);
         return true;
     }
 
@@ -69,7 +48,6 @@ class ServicesShow extends Component {
 
 
     render() {
-        console.log("render", this);
         const { endpoints } = this.props;
 
         if (_.isEmpty(endpoints)) {
@@ -102,7 +80,6 @@ class ServicesShow extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("state inside mapstatetoprops",state);
     return { endpoints: state.endpoints };
 }
 

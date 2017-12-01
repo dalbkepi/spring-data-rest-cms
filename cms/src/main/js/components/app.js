@@ -25,7 +25,7 @@ class App extends Component {
                     <div className="col-9">
                         <Switch>
                             <Route path="/services/:id/:endpoint" component={EndpointShow} />
-                            <Route path="/services/:id" component={ServicesShow} />
+                            <Route path="/services/:id" replace component={ServicesShow} />
                             <Route path="/" component={ServicesIndex} />
                         </Switch>
                     </div>
