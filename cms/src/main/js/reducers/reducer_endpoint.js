@@ -9,7 +9,7 @@ export default function(state = {}, action) {
             // newState[service.id] = post;
             // return newState;
             // return { ...state, [action.payload.data.id]: action.payload.data };
-            return action.payload.data._embedded[Object.keys(action.payload.data._embedded)[0]];
+            return action.payload.entity._embedded[Object.keys(action.payload.entity._embedded)[0]];
         default:
             return state;
     }

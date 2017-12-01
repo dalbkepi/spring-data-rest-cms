@@ -7,7 +7,7 @@ export default function(state = {}, action) {
             return _.omit(state, action.payload);
         case FETCH_SERVICES:
             // return _.mapKeys(action.payload.data, 'id');
-            var data = action.payload.data;
+            var data = action.payload.entity;
             var services = [];
             for(var key in data) {
                 var isActive = false;
