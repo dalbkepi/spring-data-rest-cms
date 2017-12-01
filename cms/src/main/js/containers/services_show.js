@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Spinner from '../components/spinner';
 import { fetchEndpoints } from '../actions/index';
 
 class ServicesShow extends Component {
@@ -27,20 +28,17 @@ class ServicesShow extends Component {
         return true;
     }
 
-    handleClick(key) {
+    handleClick(key, href) {
         const { id } = this.props.match.params;
-        this.props.history.push("/services/"+id+"/"+key);
+        this.props.history.push("/services/"+id+"/"+key, {url:href});
     }
 
-    renderEndpointsTab(firstKey) {
+    renderEndpointsTab() {
         var that = this;
         return _.map(this.props.endpoints, function(value, key) {
-            var firstClass = (key == firstKey) ? 'show active' : ''
             return (
                 <li className="nav-item" key={key+"-tab"}>
-
-                    {/*<Link to={"/services/"+id+"/"+key} className={"nav-link " + firstClass}>{key}</Link>*/}
-                    <a className={"nav-link " + firstClass} onClick={(e) => that.handleClick(key, e)} id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>
+                    <a className="nav-link" onClick={(e) => that.handleClick(key, value.href, e)} id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{key}</a>
                 </li>
             )
         });
@@ -51,29 +49,19 @@ class ServicesShow extends Component {
         const { endpoints } = this.props;
 
         if (_.isEmpty(endpoints)) {
-            return <div>Loading...</div>;
+            return <Spinner/>;
         }
-        var firstKey = Object.keys(this.props.endpoints)[0];
 
         return (
             <div>
                 <div className="mb-3">
                     <Link to="/" className="btn btn-secondary">Back</Link>
                 </div>
-                {/*<button*/}
-                    {/*className="btn btn-danger pull-xs-right"*/}
-                    {/*onClick={this.onDeleteClick.bind(this)}*/}
-                {/*>*/}
-                    {/*Delete Service*/}
-                {/*</button>*/}
                 <h3>Endpoints</h3>
                 <ul className="nav nav-tabs" id="myTab" role="tablist">
-                    {this.renderEndpointsTab(firstKey)}
+                    {this.renderEndpointsTab()}
                 </ul>
-                {/*<div className="tab-content" id="myTabContent">*/}
-                    {/*{this.renderEndpointsContent(firstKey)}*/}
-                {/*</div>*/}
-
+                <div className="alert alert-primary" role="alert">Please choose an endpoint</div>
             </div>
         );
     }
