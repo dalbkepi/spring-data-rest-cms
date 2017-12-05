@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from './spinner';
@@ -8,14 +9,34 @@ import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta } from '../actions';
 class EndpointShow extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            pageSize: 1
+        };
+        this.handleChange = this.handleChange.bind(this);
+
     }
 
     componentDidMount() {
         const { url } = this.props.location.state;
         if (!_.isEmpty(url)) {
             this.props.fetchEndpointMeta(url);
-            this.props.fetchEndpoint(url.replace(/profile\//, ''));
+            this.props.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
         }
+    }
+
+    handleChange(e) {
+        e.preventDefault();
+        var pageSize = e.target.value;
+        if (/^[0-9]+$/.test(pageSize)) {
+            if (pageSize !== this.state.pageSize) {
+                const { url } = this.props.location.state;
+                this.props.fetchEndpoint(url.replace(/profile\//, ''), pageSize);
+            }
+        } else {
+            ReactDOM.findDOMNode(this.refs.pageSize).value =
+                pageSize.substring(0, pageSize.length - 1);
+        }
+        this.setState({pageSize});
     }
 
     renderEndpoint() {
@@ -72,6 +93,14 @@ class EndpointShow extends Component {
                     <Link to={"/services/" + this.props.match.params.id} className="btn btn-secondary">Back</Link>
                 </div>
                 <h3>{"Endoint: " + this.props.match.params.endpoint}</h3>
+                {/*<input ref="pageSize" defaultValue={this.state.pageSize} onInput={this.handleChange} />*/}
+                <select value={this.state.pageSize} onChange={this.handleChange}>
+                    <option value="1">1</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
                 {this.renderTable()}
             </div>
         )
