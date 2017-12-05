@@ -1,12 +1,14 @@
 package org.dalbkepi.sdrc.reactiveservice.entities;
 
+import org.springframework.hateoas.Identifiable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class MyEntity {
+public class MyEntity implements Identifiable<Long>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
