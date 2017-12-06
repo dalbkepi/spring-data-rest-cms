@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from './spinner';
-import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta } from '../actions';
+import CreateDialog from './create_dialog';
+import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry } from '../actions';
 
 class EndpointShow extends Component {
     constructor(props) {
@@ -24,6 +25,8 @@ class EndpointShow extends Component {
         this.handleLast = this.handleLast.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.handleCreateEntry = this.handleCreateEntry.bind(this);
+        this.handleCreateSuccess = this.handleCreateSuccess.bind(this);
 
     }
 
@@ -65,11 +68,6 @@ class EndpointShow extends Component {
         this.setState({pageSize});
     }
 
-    // updateDisabledState() {
-    //         nextAvailable: true
-    //     var prevAvailable = (_.isEmpty(this.props.endpoint.prev))? 'disabled':'';
-    // }
-
     handleFirst(e) {
         e.preventDefault();
         this.props.fetchEndpoint(this.props.endpoint.first.href);
@@ -93,6 +91,15 @@ class EndpointShow extends Component {
         if (!_.isEmpty(this.props.endpoint.prev.href)) {
             this.props.fetchEndpoint(this.props.endpoint.prev.href);
         }
+    }
+
+    handleCreateSuccess() {
+        $(".alert").alert();
+    }
+
+    handleCreateEntry(newEntry) {
+        const { url } = this.props.location.state;
+        this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.props.handleCreateSuccess);
     }
 
     renderEndpoint() {
@@ -151,13 +158,20 @@ class EndpointShow extends Component {
                 <h3>{"Endoint: " + this.props.match.params.endpoint}</h3>
                 <div className="d-flex justify-content-between align-items-start">
                     <div className="p-4">
-                        <select className="form-control" value={this.state.pageSize} onChange={this.handleChange}>
-                            <option value="1">1</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
+                        <div className="d-flex justify-content-start">
+                            <div className="p-2">
+                                <select className="form-control" value={this.state.pageSize} onChange={this.handleChange}>
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div className="p-2">
+                                <CreateDialog attributes={this.props.endpoint_meta} handleCreateEntry={this.handleCreateEntry}/>
+                            </div>
+                        </div>
                     </div>
                     <div className="p-4">
                         <nav aria-label="Page navigation example">
@@ -180,8 +194,8 @@ class EndpointShow extends Component {
                         </nav>
                     </div>
                     <div className="p-4">
-                        <span className="badge badge-pill badge-info">{(this.state.currentPage) + " of " + this.state.totalPages + " pages"}</span>
-                        <span className="badge badge-pill badge-info">{this.state.totalElements + " entries"}</span>
+                        <span className="badge badge-pill badge-primary">{(this.state.currentPage) + " of " + this.state.totalPages + " pages"}</span>
+                        <span className="badge badge-pill badge-primary">{this.state.totalElements + " entries"}</span>
                     </div>
                 </div>
                 {this.renderTable()}
@@ -193,4 +207,4 @@ function mapStateToProps(state) {
     return { endpoint: state.endpoint, endpoints: state.endpoints, endpoint_meta: state.endpoint_meta };
 }
 
-export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta})(EndpointShow);
+export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry})(EndpointShow);

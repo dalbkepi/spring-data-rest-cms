@@ -7,6 +7,7 @@ export const FETCH_ENDPOINTS = 'fetch_endpoints';
 export const DELETE_SERVICE = 'delete_service';
 export const FETCH_ENDPOINT = 'fetch_endpoint';
 export const FETCH_ENDPOINT_META = 'fetch_endpoint_meta';
+export const CREATE_ENTRY = 'create_entry';
 
 const ROOT_URL = 'http://localhost:8081';
 
@@ -54,6 +55,22 @@ export function fetchEndpointMeta(url) {
     });
 
     return { type: FETCH_ENDPOINT_META, payload: request };
+}
+
+export function createEntry(url, newEntry, callback) {
+    var request = client({
+        method: 'POST',
+        path: url,
+        entity: newEntry,
+        headers: {'Content-Type': 'application/json'}
+    }).then(response => {
+        if (response.status.code == 201) {
+            callback();
+            return response;
+        }
+    })
+
+    return { type: CREATE_ENTRY, payload: request }
 }
 
 export function deleteService(id, callback) {
