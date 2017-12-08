@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from './spinner';
 import CreateDialog from './create_dialog';
+import Alert from './alert';
 import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry } from '../actions';
 
 class EndpointShow extends Component {
@@ -18,7 +19,10 @@ class EndpointShow extends Component {
             lastAvailable: 'disabled',
             totalElements: 0,
             totalPages: 0,
-            currentPage: 1
+            currentPage: 1,
+            alertVisible: false,
+            headline: '',
+            response: {}
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleFirst = this.handleFirst.bind(this);
@@ -93,13 +97,17 @@ class EndpointShow extends Component {
         }
     }
 
-    handleCreateSuccess() {
-        $(".alert").alert();
+    handleCreateSuccess(response) {
+        this.setState({
+            alertVisible: true,
+            headline: 'Created Entity for ' + this.props.match.params.endpoint,
+            response: response
+        })
     }
 
     handleCreateEntry(newEntry) {
         const { url } = this.props.location.state;
-        this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.props.handleCreateSuccess);
+        this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.handleCreateSuccess);
     }
 
     renderEndpoint() {
@@ -155,6 +163,7 @@ class EndpointShow extends Component {
                 <div className="mb-3">
                     <Link to={"/services/" + this.props.match.params.id} className="btn btn-secondary">Back</Link>
                 </div>
+                <Alert alertVisible={this.state.alertVisible} headline={this.state.headline} response={this.state.response} />
                 <h3>{"Endoint: " + this.props.match.params.endpoint}</h3>
                 <div className="d-flex justify-content-between align-items-start">
                     <div className="p-4">

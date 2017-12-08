@@ -1,16 +1,39 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 
-export default class Alert extends Component {
+class Alert extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
-        return (
-            <div>
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">Well done!</h4>
-                    <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-                    <hr />
-                    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+        if (this.props.alertVisible) {
+            var values = _.map(this.props.response.entity, function(value, key) {
+                return (
+                    <tr key={key}>
+                        <td>{_.startCase(key)}</td>
+                        <td>{value}</td>
+                    </tr>
+                )
+            });
+            return (
+                <div>
+                    <div className="alert alert-success" role="alert">
+                        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 className="alert-heading">{this.props.headline}</h4>
+                        <hr />
+                        <table className="table table-responsive">
+                            <tbody>{values}</tbody>
+                        </table>
+                        <hr />
+                        <p className="mb-0">Foo Bar.</p>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        return <div></div>;
     }
 }
+
+export default Alert
