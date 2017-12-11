@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from './spinner';
 import CreateDialog from './create_dialog';
+import UpdateDialog from './update_dialog';
 import Alert from './alert';
 import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry } from '../actions';
 
@@ -31,6 +32,7 @@ class EndpointShow extends Component {
         this.handlePrev = this.handlePrev.bind(this);
         this.handleCreateEntry = this.handleCreateEntry.bind(this);
         this.handleCreateSuccess = this.handleCreateSuccess.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
 
     }
 
@@ -110,6 +112,10 @@ class EndpointShow extends Component {
         this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.handleCreateSuccess);
     }
 
+    handleEdit(value) {
+        debugger;
+    }
+
     renderEndpoint() {
         var that = this;
         return _.map(this.props.endpoint.data, function(value, key) {
@@ -121,6 +127,7 @@ class EndpointShow extends Component {
                 });
                 return (
                     <tr key={key}>
+                        <td><UpdateDialog attributes={that.props.endpoint_meta} entry={value} handleCreateEntry={that.handleCreateEntry}/></td>
                         {names}
                     </tr>
                 )
@@ -134,6 +141,7 @@ class EndpointShow extends Component {
         });
         return (
             <tr>
+                <th>&nbsp;</th>
                 {head}
             </tr>
         )
@@ -185,7 +193,7 @@ class EndpointShow extends Component {
                     <div className="p-4">
                         <nav aria-label="Page navigation example">
                             <ul className="pagination">
-                                <li className="page-item">
+                                <li className={"page-item " + this.state.firstAvailable}>
                                     <a className="page-link" href="" onClick={this.handleFirst} aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span className="sr-only">Previous</span>
@@ -193,7 +201,7 @@ class EndpointShow extends Component {
                                 </li>
                                 <li className={"page-item " + this.state.prevAvailable}><a className="page-link" onClick={this.handlePrev} href="">&lsaquo;</a></li>
                                 <li className={"page-item " + this.state.nextAvailable}><a className="page-link" onClick={this.handleNext} href="">&rsaquo;</a></li>
-                                <li className="page-item">
+                                <li className={"page-item " + this.state.lastAvailable}>
                                     <a className="page-link" href="" onClick={this.handleLast} aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span className="sr-only">Next</span>
