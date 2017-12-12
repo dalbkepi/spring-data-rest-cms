@@ -2,12 +2,12 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Spinner from './spinner';
+import Back from './back';
 import CreateDialog from './create_dialog';
 import UpdateDialog from './update_dialog';
 import Alert from './alert';
-import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry } from '../actions';
+import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry } from '../actions';
 
 class EndpointShow extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class EndpointShow extends Component {
         this.handlePrev = this.handlePrev.bind(this);
         this.handleCreateEntry = this.handleCreateEntry.bind(this);
         this.handleCreateSuccess = this.handleCreateSuccess.bind(this);
-        this.handleEdit = this.handleEdit.bind(this);
+        this.handleUpdateEntry = this.handleUpdateEntry.bind(this);
 
     }
 
@@ -50,11 +50,15 @@ class EndpointShow extends Component {
                 firstAvailable: (_.isEmpty(nextProps.endpoint.first))? 'disabled':'',
                 prevAvailable: (_.isEmpty(nextProps.endpoint.prev))? 'disabled':'',
                 nextAvailable: (_.isEmpty(nextProps.endpoint.next))? 'disabled':'',
-                lastAvailable: (_.isEmpty(nextProps.endpoint.last))? 'disabled':'',
-                totalElements: nextProps.endpoint.page.totalElements,
-                totalPages: nextProps.endpoint.page.totalPages,
-                currentPage: nextProps.endpoint.page.number + 1
+                lastAvailable: (_.isEmpty(nextProps.endpoint.last))? 'disabled':''
             });
+            if (!_.isEmpty(nextProps.endpoint.page)) {
+                this.setState({
+                    totalElements: nextProps.endpoint.page.totalElements,
+                    totalPages: nextProps.endpoint.page.totalPages,
+                    currentPage: nextProps.endpoint.page.number + 1
+                })
+            }
         }
     }
 
@@ -107,13 +111,23 @@ class EndpointShow extends Component {
         })
     }
 
+    handleUpdateSuccess(response) {
+        const { url } = this.props.location.state;
+        this.props.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+        this.setState({
+            alertVisible: true,
+            headline: 'Entity updated for ' + this.props.match.params.endpoint,
+            response: response
+        })
+    }
+
     handleCreateEntry(newEntry) {
         const { url } = this.props.location.state;
         this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.handleCreateSuccess);
     }
 
-    handleEdit(value) {
-        debugger;
+    handleUpdateEntry(url, updatedEntry) {
+        this.props.updateEntry(url, updatedEntry, this.handleUpdateSuccess);
     }
 
     renderEndpoint() {
@@ -127,7 +141,7 @@ class EndpointShow extends Component {
                 });
                 return (
                     <tr key={key}>
-                        <td><UpdateDialog attributes={that.props.endpoint_meta} entry={value} handleCreateEntry={that.handleCreateEntry}/></td>
+                        <td><UpdateDialog attributes={that.props.endpoint_meta} entry={value} handleUpdateEntry={that.handleUpdateEntry}/></td>
                         {names}
                     </tr>
                 )
@@ -166,12 +180,18 @@ class EndpointShow extends Component {
     }
 
     render() {
+
+        if (this.props.endpoint == null) {
+            return( <div>
+                        <Back path={"/services/" + this.props.match.params.id}/>
+                        <div className="alert alert-danger" role="alert">Endpoint is not hateoas</div>
+                    </div>
+                )
+        }
         return (
             <div>
-                <div className="mb-3">
-                    <Link to={"/services/" + this.props.match.params.id} className="btn btn-secondary">Back</Link>
-                </div>
-                <Alert alertVisible={this.state.alertVisible} headline={this.state.headline} response={this.state.response} />
+                <Back path={"/services/" + this.props.match.params.id}/>
+                <Alert alertVisible={this.state.alertVisible} headline={this.state.headline} response={this.state.response} type={"alert-success"} />
                 <h3>{"Endoint: " + this.props.match.params.endpoint}</h3>
                 <div className="d-flex justify-content-between align-items-start">
                     <div className="p-4">
@@ -224,4 +244,4 @@ function mapStateToProps(state) {
     return { endpoint: state.endpoint, endpoints: state.endpoints, endpoint_meta: state.endpoint_meta };
 }
 
-export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry})(EndpointShow);
+export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry})(EndpointShow);

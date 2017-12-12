@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Spinner from '../components/spinner';
+import Back from '../components/back';
 import { fetchEndpoints } from '../actions/index';
 
 class ServicesShow extends Component {
@@ -55,7 +55,7 @@ class ServicesShow extends Component {
         return (
             <div>
                 <div className="mb-3">
-                    <Link to="/" className="btn btn-secondary">Back</Link>
+                    <Back path={"/"}/>
                 </div>
                 <h3>Endpoints</h3>
                 <ul className="nav nav-tabs" id="myTab" role="tablist">

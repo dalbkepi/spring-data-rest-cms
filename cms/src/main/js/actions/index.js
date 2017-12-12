@@ -8,6 +8,7 @@ export const DELETE_SERVICE = 'delete_service';
 export const FETCH_ENDPOINT = 'fetch_endpoint';
 export const FETCH_ENDPOINT_META = 'fetch_endpoint_meta';
 export const CREATE_ENTRY = 'create_entry';
+export const UPDATE_ENTRY = 'update_entry';
 
 const ROOT_URL = 'http://localhost:8081';
 
@@ -71,6 +72,22 @@ export function createEntry(url, newEntry, callback) {
     })
 
     return { type: CREATE_ENTRY, payload: request }
+}
+
+export function updateEntry(url, entry, callback) {
+    var request = client({
+        method: 'PUT',
+        path: url,
+        entity: entry,
+        headers: {'Content-Type': 'application/json'}
+    }).then(response => {
+        if (response.status.code == 200) {
+            callback(response);
+            return response;
+        }
+    })
+
+    return { type: UPDATE_ENTRY, payload: request }
 }
 
 export function deleteService(id, callback) {

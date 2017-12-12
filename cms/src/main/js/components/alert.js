@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 
 class Alert extends Component {
+
     constructor(props) {
         super(props);
     }
@@ -17,7 +18,7 @@ class Alert extends Component {
             });
             return (
                 <div>
-                    <div className="alert alert-success" role="alert">
+                    <div className={"alert " + this.props.type} role="alert">
                         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -27,7 +28,7 @@ class Alert extends Component {
                             <tbody>{values}</tbody>
                         </table>
                         <hr />
-                        <p className="mb-0">Foo Bar.</p>
+                        <p className="mb-0"></p>
                     </div>
                 </div>
             );

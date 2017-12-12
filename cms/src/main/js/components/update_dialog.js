@@ -9,6 +9,7 @@ class UpdateDialog extends Component {
         this.state = {
             attributes: props.attributes || [],
             entry: props.entry || {},
+            url: props.entry._links.self.href || {},
             id: _.last(props.entry._links.self.href.split("/"))
         }
 
@@ -18,22 +19,20 @@ class UpdateDialog extends Component {
         this.setState({
             attributes: nextProps.attributes,
             entry: nextProps.entry,
+            url: nextProps.entry._links.self.href || {},
             id: _.last(nextProps.entry._links.self.href.split("/"))
         })
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        var newEntry = {};
+        var updatedEntry = {};
         this.state.attributes.forEach(attribute => {
-           newEntry[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+            updatedEntry[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         });
 
-        this.props.handleCreateEntry(newEntry);
+        this.props.handleUpdateEntry(this.state.url, updatedEntry);
 
-        this.state.attributes.forEach(attribute => {
-            ReactDOM.findDOMNode(this.refs[attribute]).value = '';
-        });
         $('#updateModal-' + this.state.id).modal('hide');
     }
 
