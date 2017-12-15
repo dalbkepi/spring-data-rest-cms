@@ -6,8 +6,9 @@ import Spinner from './spinner';
 import Back from './back';
 import CreateDialog from './create_dialog';
 import UpdateDialog from './update_dialog';
+import DeleteDialog from './delete_dialog';
 import Alert from './alert';
-import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry } from '../actions';
+import { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry, deleteEntry } from '../actions';
 
 class EndpointShow extends Component {
     constructor(props) {
@@ -34,6 +35,8 @@ class EndpointShow extends Component {
         this.handleCreateSuccess = this.handleCreateSuccess.bind(this);
         this.handleUpdateEntry = this.handleUpdateEntry.bind(this);
         this.handleUpdateSuccess = this.handleUpdateSuccess.bind(this);
+        this.handleDeleteEntry = this.handleDeleteEntry.bind(this);
+        this.handleDeleteSuccess = this.handleDeleteSuccess.bind(this);
 
     }
 
@@ -128,6 +131,16 @@ class EndpointShow extends Component {
         })
     }
 
+    handleDeleteSuccess(response) {
+        const { url } = this.props.location.state;
+        this.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+        this.setState({
+            alertVisible: true,
+            headline: 'Entity deleted for ' + this.props.match.params.endpoint,
+            response: response
+        })
+    }
+
     handleCreateEntry(newEntry) {
         const { url } = this.props.location.state;
         this.props.createEntry(url.replace(/profile\//, ''), newEntry, this.handleCreateSuccess);
@@ -135,6 +148,10 @@ class EndpointShow extends Component {
 
     handleUpdateEntry(url, updatedEntry) {
         this.props.updateEntry(url, updatedEntry, this.handleUpdateSuccess);
+    }
+
+    handleDeleteEntry(url) {
+        this.props.deleteEntry(url, this.handleDeleteSuccess);
     }
 
     renderEndpoint() {
@@ -149,7 +166,10 @@ class EndpointShow extends Component {
                 return (
                     <tr key={key}>
                         <td>
-                            <UpdateDialog attributes={that.props.endpoint_meta} entry={value} id={_.last(value._links.self.href.split("/"))} callback={that.handleUpdateSuccess} />
+                            <div className="btn-group" role="group">
+                                <UpdateDialog attributes={that.props.endpoint_meta} entry={value} id={_.last(value._links.self.href.split("/"))} callback={that.handleUpdateSuccess} />
+                                <DeleteDialog attributes={that.props.endpoint_meta} entry={value} callback={that.handleDeleteSuccess} />
+                            </div>
                         </td>
                         {names}
                     </tr>
@@ -253,4 +273,4 @@ function mapStateToProps(state) {
     return { endpoint: state.endpoint, endpoints: state.endpoints, endpoint_meta: state.endpoint_meta };
 }
 
-export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry})(EndpointShow);
+export default connect(mapStateToProps, { fetchEndpoint, fetchEndpoints, fetchEndpointMeta, createEntry, updateEntry, deleteEntry})(EndpointShow);

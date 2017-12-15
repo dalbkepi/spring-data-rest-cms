@@ -2,13 +2,12 @@ import client from '../client';
 import _ from 'lodash';
 
 export const FETCH_SERVICES = 'fetch_services';
-export const CREATE_SERVICE = 'create_service';
 export const FETCH_ENDPOINTS = 'fetch_endpoints';
-export const DELETE_SERVICE = 'delete_service';
 export const FETCH_ENDPOINT = 'fetch_endpoint';
 export const FETCH_ENDPOINT_META = 'fetch_endpoint_meta';
 export const CREATE_ENTRY = 'create_entry';
 export const UPDATE_ENTRY = 'update_entry';
+export const DELETE_ENTRY = 'delete_entry'
 
 const ROOT_URL = 'http://localhost:8081';
 
@@ -92,12 +91,16 @@ export function updateEntry(url, entry, callback) {
     return { type: UPDATE_ENTRY, payload: request }
 }
 
-export function deleteService(id, callback) {
-    // const request = axios.delete(`${ROOT_URL}/services/${id}${API_KEY}`)
-    //     .then(() => callback())
-    //
-    // return {
-    //     type: DELETE_SERVICE,
-    //     payload: id
-    // }
+export function deleteEntry(url, callback) {
+    var request = client({
+        method: 'DELETE',
+        path: url
+    }).then(response => {
+       if (response.status.code == 204 ) {
+           callback()
+           return response;
+       }
+    });
+
+    return { type: DELETE_ENTRY, payload: request }
 }
