@@ -66,7 +66,9 @@ export function createEntry(url, newEntry, callback) {
         headers: {'Content-Type': 'application/json'}
     }).then(response => {
         if (response.status.code == 201) {
-            callback(response);
+            if (callback != null) {
+                callback(response);
+            }
             return response;
         }
     })

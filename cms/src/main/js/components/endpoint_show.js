@@ -33,6 +33,7 @@ class EndpointShow extends Component {
         this.handleCreateEntry = this.handleCreateEntry.bind(this);
         this.handleCreateSuccess = this.handleCreateSuccess.bind(this);
         this.handleUpdateEntry = this.handleUpdateEntry.bind(this);
+        this.handleUpdateSuccess = this.handleUpdateSuccess.bind(this);
 
     }
 
@@ -141,7 +142,9 @@ class EndpointShow extends Component {
                 });
                 return (
                     <tr key={key}>
-                        <td><UpdateDialog attributes={that.props.endpoint_meta} entry={value} handleUpdateEntry={that.handleUpdateEntry}/></td>
+                        <td>
+                            <UpdateDialog attributes={that.props.endpoint_meta} entry={value} id={_.last(value._links.self.href.split("/"))} callback={that.handleUpdateSuccess} />
+                        </td>
                         {names}
                     </tr>
                 )
