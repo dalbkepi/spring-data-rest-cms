@@ -44,7 +44,7 @@ class EndpointShow extends Component {
         const { url } = this.props.location.state;
         if (!_.isEmpty(url)) {
             this.props.fetchEndpointMeta(url);
-            this.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+            this.loadEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
         }
     }
 
@@ -66,8 +66,7 @@ class EndpointShow extends Component {
         }
     }
 
-    fetchEndpoint(pageSize) {
-        const { url } = this.props.location.state;
+    loadEndpoint(url, pageSize) {
         this.props.fetchEndpoint(url.replace(/profile\//, ''), pageSize);
     }
 
@@ -77,7 +76,7 @@ class EndpointShow extends Component {
         if (/^[0-9]+$/.test(pageSize)) {
             if (pageSize !== this.state.pageSize) {
                 const { url } = this.props.location.state;
-                this.fetchEndpoint(url.replace(/profile\//, ''), pageSize);
+                this.loadEndpoint(url.replace(/profile\//, ''), pageSize);
             }
         } else {
             ReactDOM.findDOMNode(this.refs.pageSize).value =
@@ -88,32 +87,32 @@ class EndpointShow extends Component {
 
     handleFirst(e) {
         e.preventDefault();
-        this.fetchEndpoint(this.props.endpoint.first.href);
+        this.loadEndpoint(this.props.endpoint.first.href);
 
     }
 
     handleLast(e) {
         e.preventDefault();
-        this.fetchEndpoint(this.props.endpoint.last.href);
+        this.loadEndpoint(this.props.endpoint.last.href);
     }
 
     handleNext(e) {
         e.preventDefault();
         if (!_.isEmpty(this.props.endpoint.next.href)) {
-            this.fetchEndpoint(this.props.endpoint.next.href);
+            this.loadEndpoint(this.props.endpoint.next.href);
         }
     }
 
     handlePrev(e) {
         e.preventDefault();
         if (!_.isEmpty(this.props.endpoint.prev.href)) {
-            this.fetchEndpoint(this.props.endpoint.prev.href);
+            this.loadEndpoint(this.props.endpoint.prev.href);
         }
     }
 
     handleCreateSuccess(response) {
         const { url } = this.props.location.state;
-        this.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+        this.loadEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
         this.setState({
             alertVisible: true,
             headline: 'Created Entity for ' + this.props.match.params.endpoint,
@@ -123,7 +122,7 @@ class EndpointShow extends Component {
 
     handleUpdateSuccess(response) {
         const { url } = this.props.location.state;
-        this.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+        this.loadEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
         this.setState({
             alertVisible: true,
             headline: 'Entity updated for ' + this.props.match.params.endpoint,
@@ -133,7 +132,7 @@ class EndpointShow extends Component {
 
     handleDeleteSuccess(response) {
         const { url } = this.props.location.state;
-        this.fetchEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
+        this.loadEndpoint(url.replace(/profile\//, ''), this.state.pageSize);
         this.setState({
             alertVisible: true,
             headline: 'Entity deleted for ' + this.props.match.params.endpoint,
