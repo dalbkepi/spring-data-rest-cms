@@ -38,9 +38,11 @@ export function fetchEndpoints(id) {
     return { type: FETCH_ENDPOINTS, payload: request};
 }
 
-export function fetchEndpoint(url, pageSize) {
+export function fetchEndpoint(url, pageSize, sortName, sortDirection) {
     if (pageSize != null) {
         url += '?size=' + pageSize;
+        if (!_.isEmpty(sortName))
+            url += '&sort=' + sortName + ',' + sortDirection;
     }
     var request = client({method: 'GET', path: url}).then(response => {
         return response;

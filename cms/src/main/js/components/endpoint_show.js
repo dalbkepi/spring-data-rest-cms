@@ -15,6 +15,8 @@ class EndpointShow extends Component {
         super(props);
         this.state = {
             pageSize: 10,
+            sortDirection: 'asc',
+            sortName: '',
             firstAvailable: 'disabled',
             prevAvailable: 'disabled',
             nextAvailable: 'disabled',
@@ -27,6 +29,7 @@ class EndpointShow extends Component {
             response: {}
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSort = this.handleSort.bind(this);
         this.handleFirst = this.handleFirst.bind(this);
         this.handleLast = this.handleLast.bind(this);
         this.handleNext = this.handleNext.bind(this);
@@ -54,7 +57,7 @@ class EndpointShow extends Component {
                 firstAvailable: (_.isEmpty(nextProps.endpoint.first))? 'disabled':'',
                 prevAvailable: (_.isEmpty(nextProps.endpoint.prev))? 'disabled':'',
                 nextAvailable: (_.isEmpty(nextProps.endpoint.next))? 'disabled':'',
-                lastAvailable: (_.isEmpty(nextProps.endpoint.last))? 'disabled':''
+                lastAvailable: (_.isEmpty(nextProps.endpoint.last))? 'disabled':'',
             });
             if (!_.isEmpty(nextProps.endpoint.page)) {
                 this.setState({
@@ -67,7 +70,7 @@ class EndpointShow extends Component {
     }
 
     loadEndpoint(url, pageSize) {
-        this.props.fetchEndpoint(url.replace(/profile\//, ''), pageSize);
+        this.props.fetchEndpoint(url.replace(/profile\//, ''), pageSize, this.state.sortName, this.state.sortDirection);
     }
 
     handleChange(e) {
@@ -83,6 +86,15 @@ class EndpointShow extends Component {
                 pageSize.substring(0, pageSize.length - 1);
         }
         this.setState({pageSize});
+    }
+
+    handleSort(key, e) {
+        e.preventDefault();
+        this.setState({
+            sortDirection: ((this.state.sortDirection == 'desc') ? 'asc' : 'desc'),
+            sortName: key || ''
+        })
+        this.loadEndpoint(this.props.location.state.url, this.state.pageSize);
     }
 
     handleFirst(e) {
@@ -178,12 +190,12 @@ class EndpointShow extends Component {
     }
 
     renderEndpointHead() {
-        var head = _.map(this.props.endpoint_meta, function(value, key) {
-            return <th key={key}>{_.startCase(value)}</th>
+        var head = _.map(this.props.endpoint_meta, (value, key) => {
+            return <th key={key}><button onClick={(e) => this.handleSort(value, e)} className="btn btn-sm btn-outline-secondary">{_.startCase(value)}</button></th>
         });
         return (
             <tr>
-                <th>&nbsp;</th>
+                <th><i className="material-icons">{(this.state.sortDirection == 'desc') ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</i></th>
                 {head}
             </tr>
         )
